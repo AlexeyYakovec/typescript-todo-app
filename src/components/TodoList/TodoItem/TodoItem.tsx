@@ -1,6 +1,8 @@
 import { Typography, Paper, Box } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
+import CreateIcon from "@mui/icons-material/Create";
+
 import IconButton from "@mui/material/IconButton";
 import { Todo } from "../../../App";
 
@@ -8,12 +10,14 @@ interface TodoItemProps {
    todo: Todo;
    onDeleteTodo: (id: Todo["id"]) => void;
    onCheckedTodo: (id: Todo["id"]) => void;
+   onEdit: (id: Todo["id"]) => void;
 }
 
 export const TodoItem: React.FC<TodoItemProps> = ({
    todo,
    onDeleteTodo,
    onCheckedTodo,
+   onEdit,
 }) => {
    return (
       <Paper
@@ -36,6 +40,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({
                flexDirection: "column",
                gap: 1,
                textAlign: "left",
+               width: "85%",
+               wordBreak: "break-all",
             }}
          >
             <Typography
@@ -49,17 +55,35 @@ export const TodoItem: React.FC<TodoItemProps> = ({
             >
                {todo.name}
             </Typography>
-            <Typography variant="subtitle1" component="span">
+            <Typography
+               sx={{ textWrap: "wrap" }}
+               variant="subtitle1"
+               component="div"
+            >
                {todo.description}
             </Typography>
          </Box>
-         <Box>
+         <Box
+            sx={{
+               width: "15%",
+               display: "flex",
+               alignItems: "center",
+               justifyContent: "center",
+            }}
+         >
             <IconButton
                onClick={() => onDeleteTodo(todo.id)}
-               aria-label="dd to shopping cart"
+               aria-label="error"
                color="error"
             >
                <DeleteIcon />
+            </IconButton>
+            <IconButton
+               aria-label="edit"
+               color="primary"
+               onClick={() => onEdit(todo.id)}
+            >
+               <CreateIcon />
             </IconButton>
          </Box>
       </Paper>

@@ -12,6 +12,7 @@ export type Todo = {
 };
 
 function App() {
+   const [editTodoId, setEditTodoId] = useState<number | null>(null);
    const [todoList, setTodoList] = useState([
       {
          id: 1,
@@ -28,13 +29,18 @@ function App() {
       {
          id: 3,
          name: "task 3",
-         description: "teewqeqw;lekqw;leq;wkeqwke;lqwk;ekqweqst1",
+         description:
+            "teewqeqw;lekqw;leq;wkeqwke;lqwk;ekqweqst1 teewqeqw;lekqw;leq;wkeqwke;lqwk;ekqweqst1eqweqw",
          checked: true,
       },
    ]);
 
    const onDeleteTodo = (id: Todo["id"]) => {
       setTodoList(todoList.filter((todo) => todo.id !== id));
+   };
+
+   const onEdit = (id: Todo["id"]) => {
+      setEditTodoId(id);
    };
 
    const onAddTodo = ({ name, description }: Omit<Todo, "id" | "checked">) => {
@@ -60,6 +66,21 @@ function App() {
       );
    };
 
+   const onChangeTodo = ({
+      name,
+      description,
+   }: Omit<Todo, "id" | "checked">) => {
+      setTodoList(
+         todoList.map((todo) => {
+            if (todo.id === editTodoId) {
+               return { ...todo, name, description };
+            }
+            return todo;
+         })
+      );
+      setEditTodoId(null);
+   };
+
    return (
       <div className="App">
          <Box
@@ -72,8 +93,11 @@ function App() {
             <Panel onAddTodo={onAddTodo} />
             <TodoList
                todoList={todoList}
+               editTodoId={editTodoId}
                onDeleteTodo={onDeleteTodo}
                onCheckedTodo={onCheckedTodo}
+               onEdit={onEdit}
+               onChangeTodo={onChangeTodo}
             />
          </Box>
       </div>

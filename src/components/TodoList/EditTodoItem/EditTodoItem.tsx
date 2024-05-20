@@ -1,44 +1,49 @@
-import React, { useState } from "react";
-import { TextField, Paper, Button } from "@mui/material";
-import { Add } from "@mui/icons-material";
-import { Todo } from "../../App";
+import { Paper, TextField, Button } from "@mui/material";
 
-export const DEFAULT_TODO = { name: "", description: "" };
+import { Todo } from "../../../App";
+import { useState } from "react";
 
-interface PanelProps {
-   onAddTodo: ({ name, description }: Omit<Todo, "id" | "checked">) => void;
+import CreateIcon from "@mui/icons-material/Create";
+
+interface EditTodoItemProps {
+   todo: Todo;
+   onChangeTodo: ({ name, description }: Omit<Todo, "id" | "checked">) => void;
 }
 
-export const Panel: React.FC<PanelProps> = ({ onAddTodo }) => {
-   const [todo, setTodo] = useState(DEFAULT_TODO);
+export const EditTodoItem: React.FC<EditTodoItemProps> = ({
+   todo,
+   onChangeTodo,
+}) => {
+   const [editTodo, setEditTodo] = useState({
+      name: todo.name,
+      description: todo.description,
+   });
 
    const onClick = () => {
-      onAddTodo(todo);
-      setTodo(DEFAULT_TODO);
+      onChangeTodo(editTodo);
    };
 
    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value, name } = event.target;
-      setTodo({ ...todo, [name]: value });
+      setEditTodo({ ...todo, [name]: value });
    };
 
    return (
       <Paper
-         elevation={2}
+         elevation={3}
          sx={{
-            padding: "25px 30px",
+            marginBottom: "24px",
+            width: "60%",
+            padding: "18px 26px",
             borderRadius: 2,
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: "transparent",
-            justifyContent: "space-evenly",
-            width: "100%",
-            gap: 12,
-            marginBottom: 6,
+            gap: 2,
          }}
       >
          <TextField
-            value={todo.name}
+            value={editTodo.name}
             sx={{ background: "white", borderRadius: 2 }}
             label="name"
             name="name"
@@ -47,7 +52,7 @@ export const Panel: React.FC<PanelProps> = ({ onAddTodo }) => {
             fullWidth
          />
          <TextField
-            value={todo.description}
+            value={editTodo.description}
             sx={{ background: "white", borderRadius: 2 }}
             label="description"
             name="description"
@@ -56,12 +61,12 @@ export const Panel: React.FC<PanelProps> = ({ onAddTodo }) => {
             fullWidth
          />
          <Button
-            startIcon={<Add />}
+            startIcon={<CreateIcon />}
             variant="contained"
             onClick={onClick}
             sx={{ padding: "12px 50px" }}
          >
-            Add
+            EDIT
          </Button>
       </Paper>
    );
